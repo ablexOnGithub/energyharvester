@@ -62,6 +62,7 @@ The image shows a resistor configuration sheet (example of LiFePo configuration)
 To configure the harvester for LiPo battery cells the corresponding resistors have to have the following values. This adjusts the overvoltage level
 
 Part 	| Value
+--- | ---
 ROK1 	| 4.99 MOhm
 ROK2_1	| 3.3 MOhm
 ROK2_2	| 4.02 MOhm
@@ -76,7 +77,8 @@ ROC2b 	| 5.6 MOhm
 #### LiFePo cells
 To configure the harvester for LiFePo battery cells the corresponding resistors have to have the following values.
 
-Part 	| Value
+Part 	| Value 
+--- | ---
 ROK1 	| 4.99 MOhm
 ROK2_1	| 4.99 MOhm
 ROK2_2	| 1 MOhm
@@ -95,6 +97,7 @@ Info for a Supercap only mode. I'm currently trying out a Vishay supercap with 9
 Untested resistor configuration:
 
 Part 	| Value
+--- | ---
 ROK1 	| 4.22 MOhm
 ROK2_1	| 4.02 MOhm
 ROK2_2	| 3.3 MOhm
