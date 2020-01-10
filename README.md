@@ -47,7 +47,7 @@ __GPIO PD6 == High (1) activates Vcc__
 ## Grove Digital
 Vcc on the digital Grove socket is permanently supplied.
 
-__GPIO PD
+__GPIO PD3 == Data input for digital sensor__
 
 ## Energy harvesting power supply
 The Energy Harvester integrates a harvesting power supply chip BQ25570 from Texas Instruments. It provides the 3.3V Vcc supply voltage for the AVR and attached sensors. It also provides the charging voltage for the batteries and the supercap. It also features MPPT (Maximum Power Point Tracking), to extract maximum energy from solar panels even in low light scenarios. Other power sources like thermal energy generators (TEG) can also be adapted as power source. 5.5V is the maximum allowed charge voltage level of the BQ25570. And the maximum input voltage of the power source is 5.1V. The allowed peak input power is 510mW, thus a solar cell for this energy harvester should be selected accordingly and cells > 0.5W seem not to be feasible. A better approach would be to use two 0.25W cells in parallel to adapt to the sun path by pointing into different directions.
@@ -61,7 +61,7 @@ http://www.ti.com/product/BQ25570
 
 The image shows a resistor configuration sheet (example of LiFePo configuration), provided as a template by Texas Instruments. The sheet references the predecessor BQ25505, which provides the same configuration system with multiple resistors. All resistors are 1% 1/10W SMD parts in size 0603.
 
-<img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/Config_resistors.png" alt="Location of configuration resistors on PCB">
+<img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/Config_resistors.PNG" alt="Location of configuration resistors on PCB">
 
 To configure the harvester for LiPo or LiFePo battery cells the corresponding resistors have to have the following values. This mainly adjusts the overvoltage level.
 
@@ -82,4 +82,4 @@ ROC2a	| 1 MOhm	| 1 MOhm	| 1 MOhm
 ROC2b 	| 5.6 MOhm	| 5.6 MOhm	| 5.6 MOhm
 
 ## Tracking of Vcc
-Using a voltage divider Vcc is measured against the AVR internal reference voltage (1.1V, selected via Software). The corresponding voltage is fed into ADC0 of the AVR, to allow for a dynamic adjustment of the sleep interval, related to the actual Vcc voltage level. The lower Vcc the longer the sleep intervall to safe power.
+Using a voltage divider Vcc is measured against the AVR internal reference voltage (1.1V, selected via Software, AVR reference "INTERNAL"). The corresponding voltage is fed into ADC0 of the AVR, to allow for a dynamic adjustment of the sleep interval, related to the actual Vcc voltage level. The lower Vcc the longer the sleep intervall to safe power. Vcc can only be measured, while analog Grove port is activated by __GPIO PD6 == High__. 
