@@ -67,8 +67,8 @@ To configure the harvester for LiPo or LiFePo battery cells the corresponding re
 
 __Info for Supercap mode:__ I'm currently trying out a Vishay supercap with 90F capacity at 5V. This will not have a backup battery. Idea is to increase overvoltage level to 5V (instead of 4.2/3.6V), to have more headroom for the Buck converter to longer provide 3.3V to the sensor electronics. Hopefully this is a solution for sensors that really need stable 3.3V supply. The LiPo/LiFePo configurations are running until below 3V. This currently is an untested resistor configuration!!! 
 
-Part 	| Li-Po cells | LiFePo cells	| Supercap mode
---- | ---
+Part 	| Li-Po cells | LiFePo cells	| Supercap mode 
+--- | ---	| ---	| ---
 ROK1 	| 4.99 MOhm	| 4.99 MOhm	| 4.22 MOhm
 ROK2_1	| 3.3 MOhm	| 4.99 MOhm	| 4.02 MOhm
 ROK2_2	| 4.02 MOhm	| 1 MOhm	| 3.3 MOhm
