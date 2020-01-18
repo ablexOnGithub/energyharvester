@@ -5,17 +5,17 @@ hardware and code artefacts of lorawan energy harvester node
 
 ## Technical features
 * AVR ATmega328PB
-* RFM95 LoRaWAN-Modul 868MHz
+* RFM95 LoRaWAN-Modul 868MHz (replaceable with other market variants)
 * TI BQ25570 Energy Harvester with MPPT, configured for solar power source
 * 1F Supercap
-* 2x Grove I2C
-* 1x Grove Analog
-* 1x Grove Digital
-* 1x JST for battery connection
-* 1x JST for solar panel connection
+* 2x Grove I2C sockets
+* 1x Grove Analog socket
+* 1x Grove Digital socket
+* 1x JST PH socket for battery connection
+* 1x JST PH socket for solar panel connection
 * 1x FTDI connector for serial console and programming
 * 1x u.FL socket for LoRa antenna
-* Power supply can be configured for different battery (LiPo, LiFePo or similar)
+* Power supply can be configured for different battery types (LiPo, LiFePo or similar)
 * Switchable Vcc for Grove connectors through CMOS switches
 * ISP socket for AVR programming
 
@@ -50,7 +50,7 @@ Vcc on the digital Grove socket is permanently supplied.
 __GPIO PD3 == Data input for digital sensor__
 
 ## Energy harvesting power supply
-The Energy Harvester integrates a harvesting power supply chip BQ25570 from Texas Instruments. It provides the 3.3V Vcc supply voltage for the AVR and attached sensors. It also provides the charging voltage for the batteries and the supercap. It also features MPPT (Maximum Power Point Tracking), to extract maximum energy from solar panels even in low light scenarios. Other power sources like thermal energy generators (TEG) can also be adapted as power source. 5.5V is the maximum allowed charge voltage level of the BQ25570. And the maximum input voltage of the power source is 5.1V. The allowed peak input power is 510mW, thus a solar cell for this energy harvester should be selected accordingly and cells > 0.5W seem not to be feasible. A better approach would be to use two 0.25W cells in parallel to adapt to the sun path by pointing into different directions.
+The Energy Harvester integrates a harvesting power supply chip BQ25570 from Texas Instruments. It provides the 3.3V Vcc supply voltage for the AVR and attached sensors. It also provides the charging voltage for the batteries and the supercap. It also features MPPT (Maximum Power Point Tracking), to extract maximum energy from solar panels even in low light scenarios. Other power sources like thermal energy generators (TEG) can also be adapted as power source. 5.5V is the maximum allowed charge voltage level of the BQ25570. And the maximum input voltage of the power source is 5.1V. The allowed peak input power is 510mW, thus a solar cell for this energy harvester should be selected accordingly and cells > 0.5W seem not to be feasible. A better approach would be to use two 0.25W cells in parallel to adapt to the sun path by pointing into different directions. Then, bypass diodes might have to added to the solar cells.
 
 Product page:
 http://www.ti.com/product/BQ25570
@@ -82,4 +82,38 @@ ROC2a	| 1 MOhm	| 1 MOhm	| 1 MOhm
 ROC2b 	| 5.6 MOhm	| 5.6 MOhm	| 5.6 MOhm
 
 ## Tracking of Vcc
-Using a voltage divider Vcc is measured against the AVR internal reference voltage (1.1V, selected via Software, AVR reference "INTERNAL"). The corresponding voltage is fed into ADC0 of the AVR, to allow for a dynamic adjustment of the sleep interval, related to the actual Vcc voltage level. The lower Vcc the longer the sleep intervall to safe power. Vcc can only be measured, while analog Grove port is activated by __GPIO PD6 == High__. 
+Using a voltage divider Vcc is measured against the AVR internal reference voltage (1.1V, selected via Software, AVR reference "INTERNAL"). The corresponding voltage is fed into ADC0 of the AVR, to allow for a dynamic adjustment of the sleep interval, related to the actual Vcc voltage level. The lower Vcc the longer the sleep intervall to safe power. Vcc can only be measured, while analog Grove port is activated by __GPIO PD6 == High__.
+
+# PCB Bring Up
+
+## Precharge of Supercap
+
+## VCC enable
+
+## Enable Reset lines
+
+## Connecting RFM95 I/O
+
+# Software
+
+## Programming of Arduino bootloader
+
+## Configuration of Arduino IDE
+Avrdude has to be configured to ignore the changed chip ID of the AVR ATMega328PB when uploading a new Arduino sketch. This is done by adding a '-F' to the command line options of verbose mode for avrdude in Arduino's platform.txt document.
+
+### Additional libraries
+
+### Board selection
+
+## Example sketch for Arduino
+The example sketch soil_humidity_sensor_template.ino in the /src folder presents a template for building a first prototype of the Energy Harvester with a capacitive soil humidity sensor attached.
+
+### Device and App configuration
+
+# Energy sources
+
+## Solar cells
+
+### crystaline solar cells
+
+### thin film solar cells
