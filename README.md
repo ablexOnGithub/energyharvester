@@ -86,22 +86,67 @@ Using a voltage divider Vcc is measured against the AVR internal reference volta
 
 # PCB Bring Up
 
-## Precharge of Supercap
+## Test of Boost function
+* Connect a 3V to 4V power supply with the solar connector X1, simulation a solar cell.
+* Measure the open circuit voltage at the battery connector X2, which shall be the configured Overvoltage level
+* After connecting a power supply it may take about 1 minute to charge the 1F supercap to the corresponding voltage level 4.2V, 3.6V or 5V
+* Now connect a battery or a supercap, depending on build variant, that is compatible to the measured voltage level
 
-## VCC enable
+## Test of Buck function
+* Set __VOUT_EN__ active by bridging the corresponding jumper pads
+* Measure voltage Vcc at 5-pin header and expect to see ca. 3.3V 
+                                                                                                                        
+## Programming of Arduino bootloader
+* Set __VCC__ active by bridging the corresponding jumper pads
+* Set __ISP_RST__ active by bridging the corresponding jumper pads
+* Connect the ISP adapter (z.B. ATMEL  JTAGICE3) with the programming port
+* Program a matching Arduino bootloader into the AVR     
+
+## Fuse Bits
+
+After programming the bootloader, we have to set the fuse bits to match the hardware features.
+
+Fuse | Value
+--- | ---
+CFD | "CFD_DISABLED"
+BODLEVEL | "DISABLED"
+RSTDISBL | unset
+DWEN | unset
+SPIEN | set
+WDTON | unset
+EESAVE | set
+BOOTSZ | "256W_3F00"
+BOOTRST | set
+CKDIV8 | unset
+CKOUT | unset
+SUT_CKSEL | "EXTXOSC_8MHZ_XX_16KCK_14CK_65MS"
+
+These flags evaluate to the following bit masks:
+
+__EXTENDED__= 0xF7
+__HIGH__	= 0xD6
+__LOW__		= 0xFF             
 
 ## Enable Reset lines
+* Set __RESET__ active by bridging the corresponding jumper pads
+	* This enables reset per switch and Arduino serial adapter (e.g. FTDI USB2COM)
+* Set __VBAT_OK__ active by bridging the corresponding jumper pads
+	* This enables reset by power good signal from bq25570 going low in case of battery undervoltage
+ 
+## Test of serial connection 
+* Connect a serial adapter
+* Compile and download a simple Arduino sketch for the 328PB and check for valid debug output in serial console of Arduino
+* This checks for a working serial port and a functioning bootloader
 
 ## Connecting RFM95 I/O
 
 # Software
 
-## Programming of Arduino bootloader
-
 ## Configuration of Arduino IDE
 Avrdude has to be configured to ignore the changed chip ID of the AVR ATMega328PB when uploading a new Arduino sketch. This is done by adding a '-F' to the command line options of verbose mode for avrdude in Arduino's platform.txt document.
 
 ### Additional libraries
+https://github.com/felias-fogg/SoftI2CMaster
 
 ### Board selection
 
