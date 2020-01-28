@@ -143,12 +143,18 @@ __LOW__		= 0xFF
 # Software
 
 ## Configuration of Arduino IDE
-Avrdude has to be configured to ignore the changed chip ID of the AVR ATMega328PB when uploading a new Arduino sketch. This is done by adding a '-F' to the command line options of verbose mode for avrdude in Arduino's platform.txt document.
+Avrdude has to be configured to ignore the changed chip ID of the AVR ATMega328PB when uploading a new Arduino sketch. This is done by adding a '-F' to the command line options of verbose mode for avrdude in Arduino's __platform.txt__ document.
+
+### Libraries from Library manager inside Arduino IDE
+The following libraries are needed to use the provided template sketch
+* Low-Power by Rocket Scream Electronics (there are alot others, please take this one)
+* MCCI LoRaWAN lmic Library (tested with v3.0.99, currently the MCCI lmic version is the newest fork)
 
 ### Additional libraries
 https://github.com/felias-fogg/SoftI2CMaster
 
 ### Board selection
+Install the Arduino AVR Boards package and select __"Arduino Pro or Pro mini"__ as board. As processor select __"ATmega 328p (3.3V, 8MHz)"__. Now connect your FTDI TTL serial port and configure the port inside the IDE accordingly.                     
 
 ## Example sketch for Arduino
 The example sketch soil_humidity_sensor_template.ino in the /src folder presents a template for building a first prototype of the Energy Harvester with a capacitive soil humidity sensor attached.
