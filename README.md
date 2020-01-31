@@ -143,7 +143,11 @@ __LOW__		= 0xFF
 # Software
 
 ## Configuration of Arduino IDE
-Avrdude has to be configured to ignore the changed chip ID of the AVR ATMega328PB when uploading a new Arduino sketch. This is done by adding a '-F' to the command line options of verbose mode for avrdude in Arduino's __platform.txt__ document.
+Avrdude has to be configured to ignore the changed chip ID of the AVR ATMega328PB when uploading a new Arduino sketch. This is done by adding a '-F' to the command line options of verbose mode for avrdude in Arduino's __platform.txt__ document. There are three lines to edit.
+...
+tools.avrdude.upload.params.verbose=-v -F
+tools.avrdude.program.params.verbose=-v -F
+...
 
 ### Libraries from Library manager inside Arduino IDE
 The following libraries are needed to use the provided template sketch
