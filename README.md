@@ -179,10 +179,12 @@ The example sketch soil_humidity_sensor_template.ino in the /src folder presents
 # Measurements
 
 ## Run and Sleep current
-I made some test measurements with a Qoitech Otii source meter for sleep current of the energy harvester. These first measurements were done without attached external sensors, to see the theoretical minimum consumption of the node.
+I made some test measurements with a Qoitech Otii source meter for sleep current of the energy harvester. These first measurements were done without attached external sensors, to see the theoretical minimum consumption of the node. It was measured at the battery port of the harvester and the supply was set to 3.2V, to simulate a LiFePo battery.
 
-This is a recording of the system startup showing all power modes of the device.
+This is a recording of the system startup showing all power modes of the device. The peak current seems to be slightly above 60mA
+
 <img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/1st_measurement_Startup_Eharvester.png" alt="Startup measurement of power consumption">
 
-A zoomed view of sleep current. The internal power consumption of the BQ25570 seems to be visible here.
+A zoomed view of sleep current. The internal power consumption of the BQ25570 seems to be visible here. We got a mean value of 3.9uA and a maximum value of 30.1uA sleep current.
+
 <img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/2nd_measurement_Eharvester_sleep_no_solar.png" alt="Zoom on sleep current">
