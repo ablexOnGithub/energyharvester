@@ -20,7 +20,7 @@ hardware and code artefacts of lorawan energy harvester node
 * ISP socket for AVR programming
 
 ## Sensor connections
-In general all sensor sockets (Grove layout) have a switchable Vcc line. It is off by default and has to enabled by corresponding GPIO lines.
+In general all sensor sockets (Grove layout) have a switchable Vcc line. It is off by default and has to be enabled by corresponding GPIO lines.
 
 ## I2C
 There are 2 hardware I2C ports in the 328PB. Arduino currently supports one out of the box (running as a 328P Arduino Pro Mini clone). The second I2C port is prepared for future use.
@@ -139,18 +139,22 @@ __LOW__		= 0xFF
 * This checks for a working serial port and a functioning bootloader
 
 ## Connecting RFM95 I/O
+Bridge the remaining jumper pads for the LoRa module, which are __RFM95-RST__, __MISO__, __MOSI__, __SCK__, __DIO1__ and __DIO2__.
+
+Now you can adjust the supplied test sketch in the ```/src``` folder by adding valid keys for your TTN application into, compile and download it to the harvester. In the serial console you will find debug output after restart, giving information on the LoRaWAN communication.
 
 # Software
 
 ## Configuration of Arduino IDE
-Avrdude has to be configured to ignore the changed chip ID of the AVR ATMega328PB when uploading a new Arduino sketch. This is done by adding a '-F' to the command line options of verbose mode for avrdude in Arduino's __platform.txt__ document. There are three lines to edit.
+Avrdude has to be configured to ignore the changed chip ID of the AVR ATMega328PB when uploading a new Arduino sketch. This is done by adding a '-F' to the command line options of verbose mode for avrdude in Arduino's __platform.txt__ document. There are two lines to edit. After this activate "verbose"
+mode for upload in the Arduino IDE preferences.
 ```
 tools.avrdude.upload.params.verbose=-v -F
 tools.avrdude.program.params.verbose=-v -F
 ```
 ### Libraries from Library manager inside Arduino IDE
 The following libraries are needed to use the provided template sketch
-* Low-Power by Rocket Scream Electronics (there are alot others, please take this one)
+* Low-Power by Rocket Scream Electronics (there are alot others with a similar name, please take this one)
 * MCCI LoRaWAN lmic Library (tested with v3.0.99, currently the MCCI lmic version is the newest fork)
 
 ### Additional libraries
@@ -171,3 +175,14 @@ The example sketch soil_humidity_sensor_template.ino in the /src folder presents
 ### crystaline solar cells
 
 ### thin film solar cells
+
+# Measurements
+
+## Run and Sleep current
+I made some test measurements with a Qoitech Otii source meter for sleep current of the energy harvester. These first measurements were done without attached external sensors, to see the theoretical minimum consumption of the node.
+
+This is a recording of the system startup showing all power modes of the device.
+<img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/1st_measurement_Startup_Eharvester.png" alt="Startup measurement of power consumption">
+
+A zoomed view of sleep current. The internal power consumption of the BQ25570 seems to be visible here.
+<img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/2nd_measurement_Eharvester_sleep_no_solar.png" alt="Zoom on sleep current">
