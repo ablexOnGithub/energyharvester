@@ -188,3 +188,7 @@ This is a recording of the system startup showing all power modes of the device.
 A zoomed view of sleep current. The internal power consumption of the BQ25570 seems to be visible here. We got a mean value of 3.9uA and a maximum value of 30.1uA sleep current.
 
 <img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/2nd_measurement_Eharvester_sleep_no_solar.png" alt="Zoom on sleep current">
+
+# 3D printed parts
+There are also 3D print parts that help mounting the harvester in rugged outdoor housings
+<img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/3Ddata/img/eharvester_mount.jpg" alt="eharvester mount for outdoor housings">
