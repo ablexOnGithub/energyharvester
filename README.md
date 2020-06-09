@@ -75,7 +75,7 @@ ROK2_2	| 4.02 MOhm	| 1 MOhm	| 3.3 MOhm
 ROK3 	| 806 kOhm	| 1 MOhm	| 681 kOhm
 ROV1	| 5.62 MOhm	| 4.99 MOhm	| 3.6 MOhm
 ROV2_1	| 4.02 MOhm	| 4.02 MOhm	| 3.0 MOhm
-ROV2_2  | 3.3 MOhm	| 806 kOhm	| 3.3 MOhm
+ROV2_2  | 3.3 MOhm	| 1 MOhm	| 3.3 MOhm
 ROC1a 	| 3.3 MOhm	| 3.3 MOhm	| 3.3 MOhm
 ROC1b 	| 10 MOhm	| 10 MOhm	| 10 MOhm
 ROC2a	| 1 MOhm	| 1 MOhm	| 1 MOhm
