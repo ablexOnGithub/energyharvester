@@ -191,4 +191,4 @@ A zoomed view of sleep current. The internal power consumption of the BQ25570 se
 
 # 3D printed parts
 There are also 3D print parts that help mounting the harvester in rugged outdoor housings
-<img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/3Ddata/img/eharvester_mount.jpg" alt="eharvester mount for outdoor housings">
+<img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/3D_housing_eharvester.jpg" alt="eharvester mount for outdoor housings">
