@@ -194,6 +194,7 @@ An even more detailed look into the energy consumnption of the device when it wa
 If you plan to use an external RTC to allow for longer sleep times and interrupt driven wake up, check if you RTC consumes less than the energy needed by a sequence of multiple 8s wake ups.
 
 <img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/3nd_measurement_Eharvester_sleep_8s_loop_consumption_detail.png" alt="Energy consumption per wake up">
+
 # 3D printed parts
 There are also 3D print parts that help mounting the harvester in rugged outdoor housings
 <img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/3D_housing_eharvester.jpg" alt="eharvester mount for outdoor housings">
