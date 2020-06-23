@@ -52,19 +52,21 @@
 
 #define PIN_VCC A0
 
+const int MAGICNUMBER = 0x55AA0001;
+
 struct SensorConfig {
-  byte indexAir;
-  byte indexSoil;
-  int offsetCapSoil;
+  int magicNum = MAGICNUMBER;
+  byte indexAir = 0; // The index of the DS18B20 sensor put into air
+  byte indexSoil = 1;  // The index of the DS18B20 sensor put into soil
+  int offsetCapSoil = 0; // a signed offset value for the capacitive soil moisture measurement
+  byte txInterval = 120; // Transmit interval in seconds
 };
 
 // Offsets of EEPROM structures
 int eeSensorConfigOffset = 0;
 
-// Global vars for EEPROM config
-byte idxAir = 0;
-byte idxSoil = 1;
-int offsCapSoil = 0;
+// Global structure for sensor configuration
+SensorConfig sensConf;
 
 OneWire  ds(3);  // on pin 3 (a 4.7K resistor is necessary)
 DallasTemperature sensors(&ds);
@@ -82,7 +84,7 @@ SoftWire Wire = SoftWire();
 // first. When copying an EUI from ttnctl output, this means to reverse
 // the bytes. For TTN issued EUIs the last bytes should be 0xD5, 0xB3,
 // 0x70.
-static const u1_t PROGMEM APPEUI[8] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0xD5, 0xB3, 0x70 };
+static const u1_t PROGMEM APPEUI[8] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 void os_getArtEui (u1_t* buf) {
   memcpy_P(buf, APPEUI, 8);
 }
@@ -132,16 +134,24 @@ void onEvent (ev_t ev) {
   Serial.print(": ");
   switch (ev) {
     case EV_SCAN_TIMEOUT:
+#ifdef DEBUG    
       Serial.println(F("EV_SCAN_TIMEOUT"));
+#endif
       break;
     case EV_BEACON_FOUND:
+#ifdef DEBUG
       Serial.println(F("EV_BEACON_FOUND"));
+#endif
       break;
     case EV_BEACON_MISSED:
+#ifdef DEBUG
       Serial.println(F("EV_BEACON_MISSED"));
+#endif
       break;
     case EV_BEACON_TRACKED:
+#ifdef DEBUG
       Serial.println(F("EV_BEACON_TRACKED"));
+#endif
       break;
     case EV_JOINING:
       Serial.println(F("EV_JOINING"));
@@ -178,13 +188,20 @@ void onEvent (ev_t ev) {
       LMIC_setLinkCheckMode(0);
       break;
     case EV_JOIN_FAILED:
+#ifdef DEBUG    
       Serial.println(F("EV_JOIN_FAILED"));
+#endif
       break;
     case EV_REJOIN_FAILED:
+#ifdef DEBUG    
       Serial.println(F("EV_REJOIN_FAILED"));
+#endif
       break;
     case EV_TXCOMPLETE:
+#ifdef DEBUG    
       Serial.println(F("EV_TXCOMPLETE (includes waiting for RX windows)"));
+#endif
+
 #ifdef DEBUG
       if (LMIC.txrxFlags & TXRX_ACK)
         Serial.println(F("Received ack"));
@@ -201,23 +218,35 @@ void onEvent (ev_t ev) {
       next = true;
       break;
     case EV_LOST_TSYNC:
+#ifdef DEBUG    
       Serial.println(F("EV_LOST_TSYNC"));
+#endif
       break;
     case EV_RESET:
+#ifdef DEBUG    
       Serial.println(F("EV_RESET"));
+#endif
       break;
     case EV_RXCOMPLETE:
       // data received in ping slot
+#ifdef DEBUG      
       Serial.println(F("EV_RXCOMPLETE"));
+#endif
       break;
     case EV_LINK_DEAD:
+#ifdef DEBUG    
       Serial.println(F("EV_LINK_DEAD"));
+#endif
       break;
     case EV_LINK_ALIVE:
+#ifdef DEBUG
       Serial.println(F("EV_LINK_ALIVE"));
+#endif      
       break;
     case EV_TXSTART:
+#ifdef DEBUG
       Serial.println(F("EV_TXSTART"));
+#endif
       break;
     default:
 #ifdef DEBUG
@@ -282,8 +311,8 @@ void getMeasurements() {
   int vcc;
 
   sensors.requestTemperatures();
-  temp_ds1 = (int) ( sensors.getTempCByIndex(idxAir) * 10.0);
-  temp_ds2 = (int) ( sensors.getTempCByIndex(idxSoil) * 10.0);
+  temp_ds1 = (int) ( sensors.getTempCByIndex(sensConf.indexAir) * 10.0);
+  temp_ds2 = (int) ( sensors.getTempCByIndex(sensConf.indexSoil) * 10.0);
   vcc = (int)(getVcc() * 100.0);
   writeI2CRegister8bit(sensorAddress, 6); //reset Humidity sensor
   delay(5);
@@ -374,15 +403,32 @@ void switchI2COff() {
   power_twi_disable();
 }
 
+void readEEConfig() {
+  EEPROM.get(eeSensorConfigOffset, sensConf);  
+}
+
+void writeEEConfig(bool doInit = false) {
+  if (doInit == true) {
+    sensConf.magicNum = MAGICNUMBER;
+    sensConf.indexAir = 0; // The index of the DS18B20 sensor put into air
+    sensConf.indexSoil = 1;  // The index of the DS18B20 sensor put into soil
+    sensConf.offsetCapSoil = 0; // a signed offset value for the capacitive soil moisture measurement
+    sensConf.txInterval = 120; // Transmit interval in seconds
+  }
+  EEPROM.put(eeSensorConfigOffset, sensConf);
+}
+
+
 static void processRxData(void *pUserData, uint8_t port, const uint8_t *pMsg, size_t nMsg) {
   int cnt = 0;
-  SensorConfig sensConf;
 
   // ignore mac messages
   if (port == 0) {
     return;
   }
+#ifdef DEBUG
   Serial.println(F("Processing Downlink data"));
+#endif
   // Only downlink messages with port == 1 are evaluated
   if (port == 1) {
     for (int i = 0; i < nMsg; i++) {
@@ -394,18 +440,24 @@ static void processRxData(void *pUserData, uint8_t port, const uint8_t *pMsg, si
           sensConf.indexAir = pMsg[i];
           break;
         case 0x02:
+          // Write index of Soil temp sensor (18B20)
           sensConf.indexSoil = pMsg[i];
           break;
         case 0x03:
+          // Write offset of soil moisture sensor
           sensConf.offsetCapSoil = (int) ((pMsg[i] >> 8) + pMsg[i + 1]);
           i++;
           break;
+        case 0x04:
+          // Write TX interval = Minutes (roughly)
+          sensConf.txInterval = (int) (((pMsg[i] >> 8) + pMsg[i + 1]))*60;
+          i++;
         default:
           break;
       }
     }
     // Write EEPROM config values
-    EEPROM.put(eeSensorConfigOffset, sensConf);
+    writeEEConfig();
   }
 }
 
@@ -417,11 +469,10 @@ void setup() {
   analogReference(INTERNAL);
 
   // Read EEPROM config values
-  SensorConfig sensConf;
-  EEPROM.get(eeSensorConfigOffset, sensConf);
-  idxAir = sensConf.indexAir;
-  idxSoil = sensConf.indexSoil;
-  offsCapSoil = sensConf.offsetCapSoil;
+  readEEConfig();
+  if (sensConf.magicNum != MAGICNUMBER) {
+    writeEEConfig(true);
+  }
 
   // register a callback for downlink messages.
   LMIC_registerRxMessageCb(processRxData, NULL);
@@ -467,12 +518,12 @@ void setup() {
 
 void goToSleep() {
   extern volatile unsigned long timer0_overflow_count;
-  int sleepcycles = TX_INTERVAL / 8;  // calculate the number of sleepcycles (8s) given the TX_INTERVAL
-  //#ifdef DEBUG
-  Serial.print(F("Enter sleeping for "));
+  int sleepcycles = sensConf.txInterval / 8;  // calculate the number of sleepcycles (8s) given the TX interval in seconds
+  Serial.println(F("Going to sleep!"));
+#ifdef DEBUG
   Serial.print(sleepcycles);
   Serial.println(F(" cycles of 8 seconds"));
-  //#endif
+#endif
   Serial.flush(); // give the serial print chance to complete
   power_usart0_disable();
   power_spi_disable();
