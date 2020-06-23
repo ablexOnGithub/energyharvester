@@ -185,9 +185,15 @@ This is a recording of the system startup showing all power modes of the device.
 
 <img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/1st_measurement_Startup_Eharvester.png" alt="Startup measurement of power consumption">
 
-A zoomed view of sleep current. The internal power consumption of the BQ25570 seems to be visible here. We got a mean value of 3.9uA and a maximum value of 30.1uA sleep current.
+A zoomed view of sleep current. The internal power consumption of the BQ25570 seems to be visible here. We got a __mean value of 3.9uA__ and a __maximum value of 30.1uA__ sleep current.
 
 <img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/2nd_measurement_Eharvester_sleep_no_solar.png" alt="Zoom on sleep current">
+
+An even more detailed look into the energy consumption of the device when it wakes __every 8s__ and going to sleep directly again. 8s is the longest possible sleep duration of the AVR internal sleep timer. So every longer sleep period has to be implemented with a sequence of a multiple of 8s sleeps. The ingrease of energy consumption for this "useless" sleep/wakeup is about __2.36nWh per iteration__.
+
+If you plan to use an external RTC to allow for longer sleep times and interrupt driven wake up, check if you RTC consumes less than the energy needed by a sequence of multiple 8s wake ups.
+
+<img src="https://raw.githubusercontent.com/ablexOnGithub/energyharvester/master/img/3nd_measurement_Eharvester_sleep_8s_loop_consumption_detail.png" alt="Energy consumption per wake up">
 
 # 3D printed parts
 There are also 3D print parts that help mounting the harvester in rugged outdoor housings
