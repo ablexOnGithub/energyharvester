@@ -445,12 +445,12 @@ static void processRxData(void *pUserData, uint8_t port, const uint8_t *pMsg, si
           break;
         case 0x03:
           // Write offset of soil moisture sensor
-          sensConf.offsetCapSoil = (int) ((pMsg[i] >> 8) + pMsg[i + 1]);
+          sensConf.offsetCapSoil = (int) ((pMsg[i] << 8) + pMsg[i + 1]);
           i++;
           break;
         case 0x04:
           // Write TX interval = Minutes (roughly)
-          sensConf.txInterval = (int) (((pMsg[i] >> 8) + pMsg[i + 1]))*60;
+          sensConf.txInterval = (int) (((pMsg[i] << 8) + pMsg[i + 1])*60);
           i++;
         default:
           break;
