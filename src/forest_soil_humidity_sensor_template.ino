@@ -59,7 +59,7 @@ struct SensorConfig {
   byte indexAir = 0; // The index of the DS18B20 sensor put into air
   byte indexSoil = 1;  // The index of the DS18B20 sensor put into soil
   int offsetCapSoil = 0; // a signed offset value for the capacitive soil moisture measurement
-  byte txInterval = 120; // Transmit interval in seconds
+  int txInterval = 120; // Transmit interval in seconds
 };
 
 // Offsets of EEPROM structures
